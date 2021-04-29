@@ -1,9 +1,15 @@
 package main
 
-import "os"
+import (
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/relentless-coder/vnotes-server/components"
+)
 
 func main() {
-	a := App{}
-	a.Initialize(os.Getenv("APP_DB_USERNAME"), os.Getenv("APP_DB_PASSWORD"), os.Getenv("APP_DB_NAME"))
-	a.Run(":8080")
+	var router *mux.Router
+	router = components.SetupRoutes()
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
