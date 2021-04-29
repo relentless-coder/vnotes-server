@@ -1,4 +1,4 @@
-package main
+package pages
 
 import "database/sql"
 
@@ -9,7 +9,7 @@ type pages struct {
 	UpdatedAt string `json:"updated_at"`
 }
 
-func (p *pages) createPage(db *sql.DB) error {
+func (p *pages) create(db *sql.DB) error {
 	_, err := db.Exec("insert into pages(content,created_at,updated_at) values($1,$2,$3,$4)", p.Content, p.CreatedAt, p.UpdatedAt)
 	if err != nil {
 		return err
@@ -17,7 +17,7 @@ func (p *pages) createPage(db *sql.DB) error {
 	return nil
 }
 
-func (p *pages) updatePage(db *sql.DB) error {
+func (p *pages) update(db *sql.DB) error {
 	_, err := db.Exec("update pages set content=$1, updated_at=$2 where id=$3", p.Content, p.UpdatedAt, p.ID)
 	if err != nil {
 		return err
@@ -25,7 +25,7 @@ func (p *pages) updatePage(db *sql.DB) error {
 	return nil
 }
 
-func getPages(db *sql.DB) ([]pages, error) {
+func (p *pages) get(db *sql.DB) ([]pages, error) {
 	rows, err := db.Query("select content, id from pages")
 	if err != nil {
 		return nil, err
