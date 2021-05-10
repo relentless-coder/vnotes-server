@@ -5,6 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
+	"github.com/relentless-coder/vnotes-server/components/notebooks"
 	"github.com/relentless-coder/vnotes-server/components/pages"
 	"github.com/relentless-coder/vnotes-server/helpers"
 )
@@ -19,5 +20,6 @@ func SetupRoutes() *mux.Router {
 		helpers.RespondWithJSON(w, http.StatusOK, "hello world")
 	})
 	pages.Routes(Router)
+	notebooks.Router(Router)
 	return Router
 }

@@ -52,7 +52,7 @@ func updatePage(w http.ResponseWriter, r *http.Request) {
 		h.RespondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
-	p.ID = id
+	p.Id = id
 	p.UpdatedAt = time.Now().String()
 	if err := p.update(c.DB); err != nil {
 		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
