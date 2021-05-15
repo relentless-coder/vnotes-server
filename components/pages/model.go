@@ -3,8 +3,9 @@ package pages
 import "database/sql"
 
 type pages struct {
-	Id      int `json:"id"`
-	Content []struct {
+	Id          int `json:"id"`
+	NotebooksId int `json:"notebooks_id"`
+	Content     []struct {
 		Step   string `json:"step"`
 		Points []int  `json:"points",omitempty`
 	} `json:"content",omitempty`
@@ -13,7 +14,7 @@ type pages struct {
 }
 
 func (p *pages) create(db *sql.DB) error {
-	_, err := db.Exec("insert into pages(content,created_at,updated_at) values($1,$2,$3)", p.Content, p.CreatedAt, p.UpdatedAt)
+	_, err := db.Exec("insert into pages(content,notebooks_id,created_at,updated_at) values($1,$2,$3,$4)", p.Content, p.NotebooksId, p.CreatedAt, p.UpdatedAt)
 	if err != nil {
 		return err
 	}
@@ -29,7 +30,7 @@ func (p *pages) update(db *sql.DB) error {
 }
 
 func (p *pages) get(db *sql.DB) ([]pages, error) {
-	rows, err := db.Query("select content, id from pages")
+	rows, err := db.Query("select content, id from pages where notebooks_id=$1", p.NotebooksId)
 	if err != nil {
 		return nil, err
 	}

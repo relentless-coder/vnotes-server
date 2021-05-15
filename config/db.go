@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -14,11 +13,13 @@ var (
 )
 
 func init() {
-	userName := os.Getenv("APP_DB_USERNAME")
-	dbName := os.Getenv("APP_DB_NAME")
-	connectionString := fmt.Sprintf("user=%s dbname=%s sslmode=disable", userName, dbName)
+	SetConfig()
+	dbConfig, err := GetDBVars()
+	if err != nil {
+		log.Fatal("err fetching data config %v\n", err)
+	}
+	connectionString := fmt.Sprintf("user=%s dbname=%s password=%s  sslmode=disable", dbConfig.User, dbConfig.Dbname, dbConfig.Password)
 	fmt.Printf(connectionString)
-	var err error
 	DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
 		log.Panic(err)

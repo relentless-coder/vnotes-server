@@ -14,6 +14,12 @@ import (
 
 func getPages(w http.ResponseWriter, r *http.Request) {
 	var p pages
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["notebooks_id"])
+	if err != nil {
+		h.RespondWithError(w, http.StatusBadRequest, "Invalid notebooks id")
+	}
+	p.NotebooksId = id
 	pages, err := p.get(c.DB)
 	if err != nil {
 		h.RespondWithError(w, http.StatusInternalServerError, err.Error())
